@@ -1,3 +1,5 @@
+package formats
+
 // Copyright © 2017 Dmitry Moskowski
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,15 +19,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-package formats
 
 import (
 	"encoding/json"
 )
 
-type JSON struct{}
+// JSONFormat is a JSON marshaler.
+type JSONFormat uint8
 
-func (j *JSON) Marshal(v interface{}) ([]byte, error)      { return json.Marshal(v) }
-func (j *JSON) Unmarshal(data []byte, v interface{}) error { return json.Unmarshal(data, v) }
+func (j *JSONFormat) Marshal(v interface{}) ([]byte, error) {
+	return json.Marshal(v)
+}
 
-func NewJSON() *JSON { return &JSON{} }
+func (j *JSONFormat) Unmarshal(data []byte, v interface{}) error {
+	return json.Unmarshal(data, v)
+}
+
+// NewJSON constructs a new JSON format marshaler.
+func NewJSON() *JSONFormat { return new(JSONFormat) }

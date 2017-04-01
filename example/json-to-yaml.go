@@ -1,4 +1,4 @@
-package formats
+package main
 
 // Copyright © 2017 Dmitry Moskowski
 //
@@ -21,19 +21,37 @@ package formats
 // THE SOFTWARE.
 
 import (
-	"gopkg.in/yaml.v2"
+	"fmt"
+
+	"github.com/corpix/formats"
 )
 
-// YAMLFormat is a YAML marshaler.
-type YAMLFormat uint8
+var (
+	json = `
+        {
+            "name": "Danny",
+            "roles": ["warrior", "worker"]
+        }
+    `
+)
 
-func (y *YAMLFormat) Marshal(v interface{}) ([]byte, error) {
-	return yaml.Marshal(v)
+func main() {
+	v := new(interface{})
+
+	j := formats.NewJSON()
+	err := j.Unmarshal(
+		[]byte(json),
+		v,
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	y := formats.NewYAML()
+	yaml, err := y.Marshal(v)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(yaml))
 }
-
-func (y *YAMLFormat) Unmarshal(data []byte, v interface{}) error {
-	return yaml.Unmarshal(data, v)
-}
-
-// NewYAML constructs a new YAML format marshaler.
-func NewYAML() *YAMLFormat { return new(YAMLFormat) }

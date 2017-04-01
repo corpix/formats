@@ -20,20 +20,28 @@ package formats
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import (
-	"gopkg.in/yaml.v2"
+const (
+	// JSON is a JSON format name.
+	JSON = "json"
+
+	// YAML is a YAML format name.
+	YAML = "yaml"
 )
 
-// YAMLFormat is a YAML marshaler.
-type YAMLFormat uint8
-
-func (y *YAMLFormat) Marshal(v interface{}) ([]byte, error) {
-	return yaml.Marshal(v)
+// Format is a iterator that provides a data from source.
+type Format interface {
+	Marshal(v interface{}) ([]byte, error)
+	Unmarshal(data []byte, v interface{}) error
 }
 
-func (y *YAMLFormat) Unmarshal(data []byte, v interface{}) error {
-	return yaml.Unmarshal(data, v)
+// New create a new format marshaler/unmarshaler from name.
+func New(name string) (Format, error) {
+	switch name {
+	case JSON:
+		return NewJSON(), nil
+	case YAML:
+		return NewYAML(), nil
+	default:
+		return nil, NewErrNotSupported(name)
+	}
 }
-
-// NewYAML constructs a new YAML format marshaler.
-func NewYAML() *YAMLFormat { return new(YAMLFormat) }

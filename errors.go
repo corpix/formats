@@ -1,3 +1,5 @@
+package formats
+
 // Copyright © 2017 Dmitry Moskowski
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,42 +19,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-package formats
 
 import (
-	"errors"
 	"fmt"
-
-	"github.com/corpix/errcomposer"
 )
 
-var (
-	// ErrNotSupported indicates that format with specified name is not supported.
-	ErrNotSupported = errors.New("Format is not supported")
-)
+// ErrNotSupported indicates that format with specified name is not supported.
+type ErrNotSupported struct {
+	Format string
+}
 
-// NewErrNotSupported append a name of the source to the ErrNotSupported.
-func NewErrNotSupported(format string) error {
-	return errcomposer.Compose(
-		ErrNotSupported,
-		fmt.Errorf("Name: '%s'", format),
+func (e *ErrNotSupported) Error() string {
+	return fmt.Sprintf(
+		"Format '%s' is not supported",
+		e.Format,
 	)
 }
 
-// Format is a iterator that provides a data from source.
-type Format interface {
-	Marshal(v interface{}) ([]byte, error)
-	Unmarshal(data []byte, v interface{}) error
-}
-
-// New create a new format marshaler/unmarshaler from name.
-func New(name string) (Format, error) {
-	switch name {
-	case "yaml":
-		return NewYAML(), nil
-	case "json":
-		return NewJSON(), nil
-	default:
-		return nil, NewErrNotSupported(name)
-	}
+// NewErrNotSupported wraps format name with ErrNotSupported.
+func NewErrNotSupported(format string) error {
+	return &ErrNotSupported{format}
 }
