@@ -36,17 +36,17 @@ func TestYAMLMarshal(t *testing.T) {
 		{
 			struct {
 				Foo string `yaml:"foo"`
-				Bar map[int]string
+				Bar map[string]string
 			}{
 				"hello",
-				map[int]string{
-					1: "one",
-					2: "two",
+				map[string]string{
+					"1": "one",
+					"2": "two",
 				},
 			},
 			// XXX: Lower-casing of keys is a go-yaml crap.
 			// https://github.com/go-yaml/yaml/issues/148
-			[]byte("foo: hello\nbar:\n  1: one\n  2: two\n"),
+			[]byte("foo: hello\nbar:\n  \"1\": one\n  \"2\": two\n"),
 			nil,
 		},
 	}

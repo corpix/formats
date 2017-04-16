@@ -36,12 +36,12 @@ func TestJSONMarshal(t *testing.T) {
 		{
 			struct {
 				Foo string `json:"foo"`
-				Bar map[int]string
+				Bar map[string]string
 			}{
 				"hello",
-				map[int]string{
-					1: "one",
-					2: "two",
+				map[string]string{
+					"1": "one",
+					"2": "two",
 				},
 			},
 			[]byte(`{"foo":"hello","Bar":{"1":"one","2":"two"}}`),
