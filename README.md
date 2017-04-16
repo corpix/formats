@@ -57,3 +57,11 @@ func main() {
 There is a compatibility layer for:
 
 - `JSON`, which helps to [mitigate](https://github.com/go-yaml/yaml/issues/139) non string keys in maps before they will be marshaled into `JSON`
+
+### YAML
+
+[go-yaml](https://github.com/go-yaml/yaml) handles struct keys without tags in [non-standard way](https://github.com/go-yaml/yaml/issues/148), they are lowercased.
+
+There is no good workaround for this at the time of writing. Make sure you have tags for your struct field.
+
+> Actualy I'd like to switch to more configurable yaml marshaler in the future, but at this time there is nothing better :(
