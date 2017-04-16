@@ -1,6 +1,8 @@
 formats
 ----------
 
+[![Build Status](https://travis-ci.org/corpix/formats.svg?branch=master)](https://travis-ci.org/corpix/formats)
+
 This package provides a consistent API to transform same data(represented by some `struct`) between arbitrary formats.
 
 Supported formats:
