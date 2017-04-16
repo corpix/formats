@@ -46,7 +46,10 @@ var (
 	errFormatNameIsEmpty = "Format name is empty"
 )
 
+// ErrFormatNameIsEmpty indicates that format name is an empty string.
 type ErrFormatNameIsEmpty struct{}
 
 func (e *ErrFormatNameIsEmpty) Error() string { return errFormatNameIsEmpty }
-func NewErrFormatNameIsEmpty() error          { return &ErrFormatNameIsEmpty{} }
+
+// NewErrFormatNameIsEmpty wraps format name with ErrFormatNameIsEmpty.
+func NewErrFormatNameIsEmpty() error { return &ErrFormatNameIsEmpty{} }

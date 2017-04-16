@@ -27,10 +27,12 @@ import (
 // YAMLFormat is a YAML marshaler.
 type YAMLFormat uint8
 
+// Marshal serializes data represented by v into slice of bytes.
 func (y *YAMLFormat) Marshal(v interface{}) ([]byte, error) {
 	return yaml.Marshal(v)
 }
 
+// Unmarshal deserializes data represented by data byte slice into v.
 func (y *YAMLFormat) Unmarshal(data []byte, v interface{}) error {
 	return yaml.Unmarshal(data, v)
 }

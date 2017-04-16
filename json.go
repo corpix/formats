@@ -27,10 +27,12 @@ import (
 // JSONFormat is a JSON marshaler.
 type JSONFormat uint8
 
+// Marshal serializes data represented by v into slice of bytes.
 func (j *JSONFormat) Marshal(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
 
+// Unmarshal deserializes data represented by data byte slice into v.
 func (j *JSONFormat) Unmarshal(data []byte, v interface{}) error {
 	return json.Unmarshal(data, v)
 }
