@@ -36,6 +36,10 @@ type Format interface {
 
 // New create a new format marshaler/unmarshaler from name.
 func New(name string) (Format, error) {
+	if name == "" {
+		return nil, NewErrFormatNameIsEmpty()
+	}
+
 	switch name {
 	case JSON:
 		return NewJSON(), nil

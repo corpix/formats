@@ -40,3 +40,13 @@ func (e *ErrNotSupported) Error() string {
 func NewErrNotSupported(format string) error {
 	return &ErrNotSupported{format}
 }
+
+//
+var (
+	errFormatNameIsEmpty = "Format name is empty"
+)
+
+type ErrFormatNameIsEmpty struct{}
+
+func (e *ErrFormatNameIsEmpty) Error() string { return errFormatNameIsEmpty }
+func NewErrFormatNameIsEmpty() error          { return &ErrFormatNameIsEmpty{} }
