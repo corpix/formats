@@ -53,6 +53,7 @@ var (
 type Format interface {
 	Marshal(v interface{}) ([]byte, error)
 	Unmarshal(data []byte, v interface{}) error
+	Name() string
 }
 
 // NewFromPath returns a new Format from file extension

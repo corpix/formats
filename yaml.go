@@ -35,5 +35,11 @@ func (y *YAMLFormat) Unmarshal(data []byte, v interface{}) error {
 	return yaml.Unmarshal(data, v)
 }
 
+// Name returns a format name which is used to identify this format
+// in the package.
+func (y *YAMLFormat) Name() string {
+	return YAML
+}
+
 // NewYAML constructs a new YAML format marshaler.
 func NewYAML() *YAMLFormat { return new(YAMLFormat) }
