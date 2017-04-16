@@ -67,3 +67,7 @@ There is a compatibility layer for:
 There is no good workaround for this at the time of writing. Make sure you have tags for your struct field.
 
 > Actualy I'd like to switch to more configurable yaml marshaler in the future, but at this time there is nothing better :(
+
+## License
+
+MIT
