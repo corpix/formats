@@ -54,6 +54,14 @@ func main() {
 }
 ```
 
+``` console
+$ go run ./example/json-to-yaml.go
+name: Danny
+roles:
+- warrior
+- worker
+```
+
 ## Compatibility
 
 There is a compatibility layer for:
