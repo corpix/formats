@@ -50,7 +50,7 @@ func NewFromPath(path string) (Format, error) {
 		name = synonym
 	}
 
-	return New(name)
+	return New(strings.ToLower(name))
 }
 
 // New create a new format marshaler/unmarshaler from name.
