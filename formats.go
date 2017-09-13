@@ -11,6 +11,9 @@ const (
 
 	// YAML is a YAML format name.
 	YAML = "yaml"
+
+	// TOML is a TOML format name.
+	TOML = "toml"
 )
 
 var (
@@ -20,6 +23,7 @@ var (
 	Names = []string{
 		JSON,
 		YAML,
+		TOML,
 	}
 
 	// synonyms represents a format name synonyms mapping
@@ -64,6 +68,8 @@ func New(name string) (Format, error) {
 		return NewJSON(), nil
 	case YAML:
 		return NewYAML(), nil
+	case TOML:
+		return NewTOML(), nil
 	default:
 		return nil, NewErrNotSupported(name)
 	}

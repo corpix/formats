@@ -10,7 +10,7 @@ var (
 	json = `
         {
             "name": "Danny",
-            "roles": ["warrior", "worker"]
+            "roles": [{"name": "warrior"}, {"name": "worker"}]
         }
     `
 )
