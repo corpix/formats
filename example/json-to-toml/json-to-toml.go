@@ -30,11 +30,11 @@ func main() {
 		panic(err)
 	}
 
-	y := formats.NewTOML()
-	yaml, err := y.Marshal(v)
+	t := formats.NewTOML()
+	toml, err := t.Marshal(v)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(string(yaml))
+	fmt.Println(string(toml))
 }
