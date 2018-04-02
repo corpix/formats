@@ -1,6 +1,7 @@
 package formats
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -36,5 +37,10 @@ func TestTOMLMarshal(t *testing.T) {
 		result, err := toml.Marshal(sample.input)
 		assert.EqualValues(t, sample.err, err, msg)
 		assert.EqualValues(t, sample.result, result, msg)
+
+		v := reflect.New(reflect.TypeOf(sample.input)).Interface()
+		err = toml.Unmarshal(result, v)
+		assert.EqualValues(t, sample.err, err, msg)
+		assert.EqualValues(t, sample.input, reflect.ValueOf(v).Elem().Interface(), msg)
 	}
 }

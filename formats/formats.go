@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -11,21 +12,27 @@ import (
 
 func Action(ctx *cli.Context) error {
 	var (
-		v    = *new(interface{})
-		buf  []byte
-		from formats.Format
-		to   formats.Format
-		err  error
+		v              = *new(interface{})
+		fromFormatName = ctx.String("from")
+		toFormatName   = ctx.String("to")
+		from           formats.Format
+		to             formats.Format
+		buf            []byte
+		err            error
 	)
 
-	from, err = formats.New(ctx.String("from"))
-	if err != nil {
-		return err
+	if fromFormatName != "" {
+		from, err = formats.New(fromFormatName)
+		if err != nil {
+			return err
+		}
 	}
 
-	to, err = formats.New(ctx.String("to"))
-	if err != nil {
-		return err
+	if toFormatName != "" {
+		to, err = formats.New(toFormatName)
+		if err != nil {
+			return err
+		}
 	}
 
 	buf, err = ioutil.ReadAll(os.Stdin)
@@ -33,19 +40,31 @@ func Action(ctx *cli.Context) error {
 		return err
 	}
 
-	err = from.Unmarshal(buf, &v)
-	if err != nil {
-		return err
+	if from == nil {
+		v = formats.NewStringer(string(buf))
+	} else {
+		err = from.Unmarshal(buf, &v)
+		if err != nil {
+			return err
+		}
 	}
 
-	switch ctx.String("to") {
+	switch toFormatName {
 	case formats.JSON:
 		v = compatibility.JSON(v)
 	}
 
-	buf, err = to.Marshal(v)
-	if err != nil {
-		return err
+	if to == nil {
+		fmt.Fprintf(
+			os.Stdout,
+			"%s",
+			v,
+		)
+	} else {
+		buf, err = to.Marshal(v)
+		if err != nil {
+			return err
+		}
 	}
 
 	_, err = os.Stdout.Write(buf)
@@ -53,26 +72,30 @@ func Action(ctx *cli.Context) error {
 		return err
 	}
 
-	_, err = os.Stdout.Write([]byte{'\n'})
+	if !ctx.Bool("n") {
+		_, err = os.Stdout.Write([]byte{'\n'})
+	}
 
 	return err
 }
 
 func main() {
-	var (
-		app = cli.NewApp()
-	)
+	app := cli.NewApp()
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "from",
-			Value: "json",
-			Usage: "From `what` format to encode",
+			Value: "",
+			Usage: "Decode `from` format",
 		},
 		cli.StringFlag{
 			Name:  "to",
-			Value: "json",
-			Usage: "Decode into `specified` format",
+			Value: "",
+			Usage: "Encode `to` format",
+		},
+		cli.BoolFlag{
+			Name:  "n",
+			Usage: "Do not print line break",
 		},
 	}
 

@@ -1,6 +1,7 @@
 package formats
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -38,5 +39,10 @@ func TestYAMLMarshal(t *testing.T) {
 		result, err := yaml.Marshal(sample.input)
 		assert.EqualValues(t, sample.err, err, msg)
 		assert.EqualValues(t, sample.result, result, msg)
+
+		v := reflect.New(reflect.TypeOf(sample.input)).Interface()
+		err = yaml.Unmarshal(result, v)
+		assert.EqualValues(t, sample.err, err, msg)
+		assert.EqualValues(t, sample.input, reflect.ValueOf(v).Elem().Interface(), msg)
 	}
 }

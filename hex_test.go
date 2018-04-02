@@ -4,43 +4,40 @@ import (
 	"reflect"
 	"testing"
 
+	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestJSONMarshaling(t *testing.T) {
+func TestHEXMarshal(t *testing.T) {
 	samples := []struct {
 		input  interface{}
 		result []byte
 		err    error
 	}{
 		{
-			struct {
-				Foo string `json:"foo"`
-				Bar map[string]string
-			}{
-				"hello",
-				map[string]string{
-					"1": "one",
-					"2": "two",
-				},
-			},
-			[]byte(`{"foo":"hello","Bar":{"1":"one","2":"two"}}`),
-			nil,
+			input:  NewStringer("d34db33f"),
+			result: []byte(`6433346462333366`),
+			err:    nil,
+		},
+		{
+			input:  NewStringer("holy moly!"),
+			result: []byte(`686f6c79206d6f6c7921`),
+			err:    nil,
 		},
 	}
 
-	json := NewJSON()
+	hex := NewHEX()
 	for k, sample := range samples {
 		msg := spew.Sdump(k, sample)
 
-		result, err := json.Marshal(sample.input)
+		result, err := hex.Marshal(sample.input)
 		assert.EqualValues(t, sample.err, err, msg)
 		assert.EqualValues(t, sample.result, result, msg)
 
 		v := reflect.New(reflect.TypeOf(sample.input)).Interface()
-		err = json.Unmarshal(result, v)
-		assert.EqualValues(t, sample.err, err, msg)
+		err = hex.Unmarshal(result, v)
+		assert.EqualValues(t, sample.err, err, fmt.Sprintf("%s", err))
 		assert.EqualValues(t, sample.input, reflect.ValueOf(v).Elem().Interface(), msg)
 	}
 }

@@ -15,7 +15,6 @@ func TestNewFromPath(t *testing.T) {
 	}{
 
 		// json
-
 		{
 			"foo/bar.json",
 			NewJSON(),
@@ -33,7 +32,6 @@ func TestNewFromPath(t *testing.T) {
 		},
 
 		// yaml
-
 		{
 			"foo/bar.yaml",
 			NewYAML(),
@@ -50,8 +48,41 @@ func TestNewFromPath(t *testing.T) {
 			NewErrFormatNameIsEmpty(),
 		},
 
-		// other
+		// toml
+		{
+			"foo/bar.toml",
+			NewTOML(),
+			nil,
+		},
+		{
+			".toml",
+			NewTOML(),
+			nil,
+		},
+		{
+			"foo/bartoml",
+			nil,
+			NewErrFormatNameIsEmpty(),
+		},
 
+		// hex
+		{
+			"foo/bar.hex",
+			NewHEX(),
+			nil,
+		},
+		{
+			".hex",
+			NewHEX(),
+			nil,
+		},
+		{
+			"foo/barhex",
+			nil,
+			NewErrFormatNameIsEmpty(),
+		},
+
+		// ...
 		{
 			"foo/bar.lol",
 			nil,
@@ -77,7 +108,6 @@ func TestNew(t *testing.T) {
 	}{
 
 		// json
-
 		{
 			"json",
 			NewJSON(),
@@ -87,11 +117,6 @@ func TestNew(t *testing.T) {
 			"JSON",
 			nil,
 			NewErrNotSupported("JSON"),
-		},
-		{
-			"",
-			nil,
-			NewErrFormatNameIsEmpty(),
 		},
 
 		// yaml
@@ -110,6 +135,32 @@ func TestNew(t *testing.T) {
 			nil,
 			NewErrNotSupported("YAML"),
 		},
+
+		// toml
+		{
+			"toml",
+			NewTOML(),
+			nil,
+		},
+		{
+			"TOML",
+			nil,
+			NewErrNotSupported("TOML"),
+		},
+
+		// hex
+		{
+			"hex",
+			NewHEX(),
+			nil,
+		},
+		{
+			"HEX",
+			nil,
+			NewErrNotSupported("HEX"),
+		},
+
+		// ...
 		{
 			"",
 			nil,
