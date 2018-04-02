@@ -5,6 +5,7 @@ stdenv.mkDerivation {
     go
     gocode
     godef
+    go2nix
     dep
     delve
     go-langserver
