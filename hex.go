@@ -71,7 +71,11 @@ func (f *HEXFormat) Unmarshal(data []byte, v interface{}) error {
 		return err
 	}
 
-	if rv.Type() != stringerType || !rv.IsValid() {
+	if rv.Type() != stringerType {
+		if rv.Elem().Kind() == reflect.Interface {
+			rv.Elem().Set(reflect.ValueOf(*NewStringer(string(buf))))
+			return nil
+		}
 		return reflect.NewErrCanNotAssertType(
 			v,
 			stringerType,

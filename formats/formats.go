@@ -49,11 +49,6 @@ func Action(ctx *cli.Context) error {
 		}
 	}
 
-	switch toFormatName {
-	case formats.JSON:
-		v = compatibility.JSON(v)
-	}
-
 	if to == nil {
 		fmt.Fprintf(
 			os.Stdout,
@@ -61,15 +56,20 @@ func Action(ctx *cli.Context) error {
 			v,
 		)
 	} else {
+		switch toFormatName {
+		case formats.JSON:
+			v = compatibility.JSON(v)
+		}
+
 		buf, err = to.Marshal(v)
 		if err != nil {
 			return err
 		}
-	}
 
-	_, err = os.Stdout.Write(buf)
-	if err != nil {
-		return err
+		_, err = os.Stdout.Write(buf)
+		if err != nil {
+			return err
+		}
 	}
 
 	if !ctx.Bool("n") {
