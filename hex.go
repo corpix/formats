@@ -58,28 +58,26 @@ func (f *HEXFormat) Unmarshal(data []byte, v interface{}) error {
 	var (
 		buf = make([]byte, hex.DecodedLen(len(data)))
 		rv  = f.indirectToFstPtr(v)
+		n   int
 		err error
 	)
 
 	if rv.Kind() != reflect.Ptr {
 		return reflect.NewErrWrongKind(reflect.Ptr, rv.Kind())
-
 	}
 
-	_, err = hex.Decode(buf, data)
+	n, err = hex.Decode(buf, data)
 	if err != nil {
 		return err
 	}
+	buf = buf[:n]
 
 	if rv.Type() != stringerType {
 		if rv.Elem().Kind() == reflect.Interface {
 			rv.Elem().Set(reflect.ValueOf(*NewStringer(string(buf))))
 			return nil
 		}
-		return reflect.NewErrCanNotAssertType(
-			v,
-			stringerType,
-		)
+		return reflect.NewErrCanNotAssertType(v, stringerType)
 	}
 
 	rv.Set(reflect.ValueOf(NewStringer(string(buf))))
