@@ -1,7 +1,7 @@
 with import <nixpkgs>{};
 { pkgs ? import <nixpkgs> {} }:
 
-buildGo19Package rec {
+buildGoPackage rec {
   name = "formats-unstable-${version}";
   version = "development";
 
