@@ -123,4 +123,4 @@ There is no good workaround for this at the time of writing. Make sure you have 
 
 ## License
 
-MIT
+unlicense
