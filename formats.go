@@ -17,6 +17,9 @@ const (
 
 	// HEX is a HEX format name.
 	HEX = "hex"
+
+	// BASE64 is a BASE64 format name.
+	BASE64 = "base64"
 )
 
 var (
@@ -28,12 +31,14 @@ var (
 		YAML,
 		TOML,
 		HEX,
+		BASE64,
 	}
 
 	// synonyms represents a format name synonyms mapping
 	// into concrete format name.
 	synonyms = map[string]string{
 		"yml": YAML,
+		"b64": BASE64,
 	}
 )
 
@@ -50,10 +55,7 @@ type Format interface {
 // for example: yaml format files could have extensions
 // yaml or yml.
 func NewFromPath(path string) (Format, error) {
-	name := strings.TrimPrefix(
-		filepath.Ext(path),
-		".",
-	)
+	name := strings.TrimPrefix(filepath.Ext(path), ".")
 	if synonym, ok := synonyms[name]; ok {
 		name = synonym
 	}
@@ -76,6 +78,8 @@ func New(name string) (Format, error) {
 		return NewTOML(), nil
 	case HEX:
 		return NewHEX(), nil
+	case BASE64:
+		return NewBASE64(), nil
 	default:
 		return nil, NewErrNotSupported(name)
 	}

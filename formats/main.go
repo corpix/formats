@@ -50,11 +50,7 @@ func Action(ctx *cli.Context) error {
 	}
 
 	if to == nil {
-		fmt.Fprintf(
-			os.Stdout,
-			"%s",
-			v,
-		)
+		fmt.Fprintf(os.Stdout, "%s", v)
 	} else {
 		switch toFormatName {
 		case formats.JSON:
