@@ -12,8 +12,7 @@ buildGoPackage rec {
     cp    go/bin/formats $bin/bin
   '';
 
-  goDeps = ./deps.nix;
-
   src = ./.;
+  goDeps = ./deps.nix;
   goPackagePath = "github.com/corpix/formats";
 }
