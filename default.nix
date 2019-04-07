@@ -1,8 +1,6 @@
 with import <nixpkgs>{};
-{ pkgs ? import <nixpkgs> {} }:
-
 buildGoPackage rec {
-  name = "formats-unstable-${version}";
+  name = "formats-${version}";
   version = "development";
 
   buildInputs = with pkgs; [ git dep ];

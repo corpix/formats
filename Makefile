@@ -1,37 +1,33 @@
 .DEFAULT_GOAL = all
 
-numcpus  := $(shell cat /proc/cpuinfo | grep '^processor\s*:' | wc -l)
 version  := $(shell git rev-list --count HEAD).$(shell git rev-parse --short HEAD)
 
 name     := formats
 package  := github.com/corpix/$(name)
 
-# XXX: Fuck you golang!
-# 99% of time having vendor in a wildcard result is not what you want!
-packages := $(shell go list ./... | grep -v /vendor/)
-
 .PHONY: all
-all:: dependencies
+all: build
 
-.PHONY: dependencies
-dependencies::
-	dep ensure
+.PHONY: build
+build:
+	mkdir -p $@
+	go build -o $@/formats ./formats/main.go
 
 .PHONY: test
-test:: dependencies
-	go test -v $(packages)
+test:
+	go test -v ./...
 
 .PHONY: bench
-bench:: dependencies
-	go test -bench=. -v $(packages)
+bench:
+	go test -bench=. -v ./...
 
 .PHONY: lint
-lint:: dependencies
-	go vet -v $(packages)
+lint:
+	go vet -v ./...
 
 .PHONY: check
-check:: lint test
+check: lint test
 
 .PHONY: clean
-clean::
+clean:
 	git clean -xddff
