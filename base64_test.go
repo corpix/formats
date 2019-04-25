@@ -10,32 +10,43 @@ import (
 
 func TestBASE64Marshaling(t *testing.T) {
 	samples := []struct {
-		input  interface{}
-		result []byte
-		err    error
+		input       interface{}
+		result      []byte
+		err         error
+		inputResult bool
+		resultInput bool
 	}{
 		{
-			NewStringer(`hello`),
-			[]byte(`aGVsbG8=`),
-			nil,
+			NewStringer("hello"),
+			[]byte("aGVsbG8="),
+			nil, true, true,
+		},
+		{
+			NewStringer("hello"),
+			[]byte(" aG V\tsb\nG8 = "),
+			nil, false, true,
 		},
 	}
 
-	base64 := NewBASE64()
+	enc := NewBASE64()
 	for k, sample := range samples {
 		msg := spew.Sdump(k, sample)
 
-		result, err := base64.Marshal(sample.input)
-		assert.EqualValues(t, sample.err, err, msg)
-		assert.EqualValues(t, sample.result, result, msg)
+		if sample.inputResult {
+			result, err := enc.Marshal(sample.input)
+			assert.EqualValues(t, sample.err, err, msg)
+			assert.EqualValues(t, sample.result, result, msg)
+		}
 
-		v := reflect.New(reflect.TypeOf(sample.input)).Interface()
-		err = base64.Unmarshal(result, v)
-		assert.EqualValues(t, sample.err, err, msg)
-		assert.EqualValues(
-			t, sample.input.(*Stringer).String(),
-			reflect.ValueOf(v).Elem().Interface().(*Stringer).String(),
-			msg,
-		)
+		if sample.resultInput {
+			v := reflect.New(reflect.TypeOf(sample.input)).Interface()
+			err := enc.Unmarshal(sample.result, v)
+			assert.EqualValues(t, sample.err, err, msg)
+			assert.EqualValues(
+				t, sample.input.(*Stringer).String(),
+				reflect.ValueOf(v).Elem().Interface().(*Stringer).String(),
+				msg,
+			)
+		}
 	}
 }

@@ -66,7 +66,7 @@ func (f *HEXFormat) Unmarshal(data []byte, v interface{}) error {
 		return reflect.NewErrWrongKind(reflect.Ptr, rv.Kind())
 	}
 
-	n, err = hex.Decode(buf, data)
+	n, err = hex.Decode(buf, TrimEmptySpace(data))
 	if err != nil {
 		return err
 	}
