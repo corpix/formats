@@ -62,7 +62,6 @@ func (b *BASE64Format) Unmarshal(data []byte, v interface{}) error {
 		return reflect.NewErrWrongKind(reflect.Ptr, rv.Kind())
 	}
 
-	fmt.Println(string(TrimEmptySpace(data)))
 	n, err = base64.StdEncoding.Decode(buf, TrimEmptySpace(data))
 	if err != nil {
 		return err
