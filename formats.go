@@ -69,6 +69,10 @@ func New(name string) (Format, error) {
 		return nil, NewErrFormatNameIsEmpty()
 	}
 
+	if synonym, ok := synonyms[name]; ok {
+		name = synonym
+	}
+
 	switch name {
 	case JSON:
 		return NewJSON(), nil
