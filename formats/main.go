@@ -5,12 +5,40 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/urfave/cli"
+
 	"github.com/corpix/formats"
 	"github.com/corpix/formats/compatibility"
-	"github.com/urfave/cli"
 )
 
-func Action(ctx *cli.Context) error {
+var (
+	Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:  "from",
+			Value: "",
+			Usage: "decode `from` format",
+		},
+		cli.StringFlag{
+			Name:  "to",
+			Value: "",
+			Usage: "encode `to` format",
+		},
+		cli.BoolFlag{
+			Name:  "n",
+			Usage: "do not print line break",
+		},
+	}
+
+	Commands = []cli.Command{
+		cli.Command{
+			Name:   "list",
+			Usage:  "List supported formats",
+			Action: ListAction,
+		},
+	}
+)
+
+func RootAction(ctx *cli.Context) error {
 	var (
 		v              = *new(interface{})
 		fromFormatName = ctx.String("from")
@@ -75,27 +103,19 @@ func Action(ctx *cli.Context) error {
 	return err
 }
 
+func ListAction(ctx *cli.Context) error {
+	for _, name := range formats.Names {
+		fmt.Printf("%s - %s\n", name, formats.Descriptions[name])
+	}
+	return nil
+}
+
 func main() {
 	app := cli.NewApp()
 
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "from",
-			Value: "",
-			Usage: "Decode `from` format",
-		},
-		cli.StringFlag{
-			Name:  "to",
-			Value: "",
-			Usage: "Encode `to` format",
-		},
-		cli.BoolFlag{
-			Name:  "n",
-			Usage: "Do not print line break",
-		},
-	}
-
-	app.Action = Action
+	app.Flags = Flags
+	app.Commands = Commands
+	app.Action = RootAction
 
 	app.RunAndExitOnError()
 }

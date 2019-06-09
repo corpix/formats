@@ -20,6 +20,12 @@ const (
 
 	// BASE64 is a BASE64 format name.
 	BASE64 = "base64"
+
+	// QUERY is a QUERY format name.
+	QUERY = "query"
+
+	// FLATE is a FLATE format name.
+	FLATE = "flate"
 )
 
 var (
@@ -32,6 +38,18 @@ var (
 		TOML,
 		HEX,
 		BASE64,
+		QUERY,
+		FLATE,
+	}
+
+	Descriptions = map[string]string{
+		JSON:   "javascript object notation is a lightweight data-interchange format",
+		YAML:   "yaml ain't markup language, human-readable data-serialization language",
+		TOML:   "tom's obvious, minimal language, a configuration file format",
+		HEX:    "base 16 encoding",
+		BASE64: "base 64 encoding",
+		QUERY:  "percent encoded string",
+		FLATE:  "deflate compressed data format",
 	}
 
 	// synonyms represents a format name synonyms mapping
@@ -39,6 +57,8 @@ var (
 	synonyms = map[string]string{
 		"yml": YAML,
 		"b64": BASE64,
+		"q":   QUERY,
+		"f": FLATE,
 	}
 )
 
@@ -84,6 +104,10 @@ func New(name string) (Format, error) {
 		return NewHEX(), nil
 	case BASE64:
 		return NewBASE64(), nil
+	case QUERY:
+		return NewQUERY(), nil
+	case FLATE:
+		return NewFLATE(), nil
 	default:
 		return nil, NewErrNotSupported(name)
 	}
